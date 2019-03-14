@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                     // no connection
                     return;
                 }
-
             }
         }
     }

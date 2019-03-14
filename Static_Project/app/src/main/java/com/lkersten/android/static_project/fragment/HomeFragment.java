@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.lkersten.android.static_project.BrowseActivity;
+import com.lkersten.android.static_project.ProfileActivity;
 import com.lkersten.android.static_project.R;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -50,15 +51,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getContext(), "Please Sign-in before proceeding", Toast.LENGTH_SHORT).show();
         }
 
+        //intent to be used for navigation buttons
+        Intent intent = null;
+
         //handle button actions based on view ID
         switch (v.getId()) {
             case R.id.home_btn_browse:
-                Intent i = new Intent(getActivity(), BrowseActivity.class);
-                startActivity(i);
+                intent = new Intent(getActivity(), BrowseActivity.class);
+                startActivity(intent);
                 break;
             case R.id.home_btn_chat:
                 break;
             case R.id.home_btn_profile:
+                intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
                 break;
             case R.id.home_btn_logout:
                 break;

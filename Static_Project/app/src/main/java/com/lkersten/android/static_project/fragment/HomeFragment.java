@@ -1,5 +1,6 @@
 package com.lkersten.android.static_project.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.lkersten.android.static_project.BrowseActivity;
 import com.lkersten.android.static_project.R;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -51,6 +53,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         //handle button actions based on view ID
         switch (v.getId()) {
             case R.id.home_btn_browse:
+                Intent i = new Intent(getActivity(), BrowseActivity.class);
+                startActivity(i);
                 break;
             case R.id.home_btn_chat:
                 break;

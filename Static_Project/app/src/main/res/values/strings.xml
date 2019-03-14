@@ -4,4 +4,13 @@
     <string name="profile">Profile</string>
     <string name="chat">Chat</string>
     <string name="sign_out">Sign out</string>
+    <string name="edit">Edit</string>
+    <string name="games">Games:</string>
+    <string name="platforms">Platforms:</string>
+    <string name="bio">Bio:</string>
+    <string name="username">Username:</string>
+    <string name="username_hint">Username</string>
+    <string name="games_hint">Games you play</string>
+    <string name="platforms_hint">Platforms you play on</string>
+    <string name="bio_hint">Enter info about you</string>
 </resources>

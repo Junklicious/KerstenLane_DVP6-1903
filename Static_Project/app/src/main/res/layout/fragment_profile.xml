@@ -8,10 +8,11 @@
 
     <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher_round"
@@ -38,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Games:"
+                android:text="@string/games"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
@@ -54,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Platforms:"
+                android:text="@string/platforms"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
@@ -70,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Bio:"
+                android:text="@string/bio"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
@@ -106,7 +107,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Username:"
+        android:text="@string/username"
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_image"

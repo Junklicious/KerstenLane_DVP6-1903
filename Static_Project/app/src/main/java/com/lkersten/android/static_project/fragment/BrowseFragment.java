@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.lkersten.android.static_project.R;
 
-public class BrowseFragment extends Fragment {
+public class BrowseFragment extends Fragment implements View.OnClickListener {
 
     public static BrowseFragment newInstance() {
         return new BrowseFragment();
@@ -25,13 +25,27 @@ public class BrowseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getActivity() == null) {
+        if (getActivity() == null || getView() == null) {
             return;
         }
+
+        //add button functionality
+        getView().findViewById(R.id.browse_btn_yes).setOnClickListener(this);
+        getView().findViewById(R.id.browse_btn_no).setOnClickListener(this);
 
         //add profile fragment to browse page
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.browse_fragment_container, ProfileFragment.newInstance())
                 .commit();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (v.getId() == R.id.browse_btn_yes) {
+
+        } else if (v.getId() == R.id.browse_btn_no) {
+
+        }
     }
 }

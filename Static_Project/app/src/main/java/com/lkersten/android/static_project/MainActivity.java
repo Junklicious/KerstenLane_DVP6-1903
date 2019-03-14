@@ -9,6 +9,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.lkersten.android.static_project.fragment.BrowseFragment;
 import com.lkersten.android.static_project.fragment.HomeFragment;
 

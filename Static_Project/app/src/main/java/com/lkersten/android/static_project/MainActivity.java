@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.FirebaseApp;
+import com.lkersten.android.static_project.fragment.BrowseFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // successful sign in
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, BrowseFragment.newInstance()).commit();
             } else {
                 // failed sign in
                 if (response == null || response.getError() == null) {

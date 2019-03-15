@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.lkersten.android.static_project.R;
 import com.lkersten.android.static_project.model.Profile;
-import com.lkersten.android.static_project.utility.BackendUtil;
 
 public class EditFragment extends Fragment {
 
@@ -62,9 +61,9 @@ public class EditFragment extends Fragment {
     }
 
     private void saveUserData() {
-        String userID = BackendUtil.getCurrentUserID();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (userID == null || getView() == null || getActivity() == null) {
+        if (user == null || getView() == null || getActivity() == null) {
             return;
         }
 
@@ -75,7 +74,7 @@ public class EditFragment extends Fragment {
         String platforms = ((TextView)getView().findViewById(R.id.edit_text_platforms)).getText().toString();
         String bio = ((TextView)getView().findViewById(R.id.edit_text_bio)).getText().toString();
 
-        db.collection("Users").document(userID).set(new Profile(username, games, platforms, bio));
+        db.collection("Users").document(user.getUid()).set(new Profile(username, games, platforms, bio));
 
         getActivity().finish();
     }

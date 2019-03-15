@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.lkersten.android.static_project.R;
 import com.lkersten.android.static_project.model.Profile;
-import com.lkersten.android.static_project.utility.BackendUtil;
 
 public class ProfileFragment extends Fragment {
 
@@ -33,10 +33,21 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //populate info based on user profile from firebase
-        final String userID = BackendUtil.getCurrentUserID();
+        loadUserProfile();
+    }
 
-        if (userID == null) {
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        loadUserProfile();
+    }
+
+    private void loadUserProfile() {
+        //populate info based on user profile from firebase
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
             return;
         }
 
@@ -44,7 +55,7 @@ public class ProfileFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         //get profile based on userID
-        db.collection("Users").document(userID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("Users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 //convert data to profile

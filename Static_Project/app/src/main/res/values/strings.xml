@@ -13,4 +13,5 @@
     <string name="games_hint">Games you play</string>
     <string name="platforms_hint">Platforms you play on</string>
     <string name="bio_hint">Enter info about you</string>
+    <string name="browse_players">Browse Players</string>
 </resources>

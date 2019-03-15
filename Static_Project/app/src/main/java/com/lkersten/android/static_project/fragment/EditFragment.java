@@ -11,15 +11,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.lkersten.android.static_project.R;
-
-import java.util.HashMap;
+import com.lkersten.android.static_project.model.Profile;
+import com.lkersten.android.static_project.utility.BackendUtil;
 
 public class EditFragment extends Fragment {
 
@@ -63,24 +62,21 @@ public class EditFragment extends Fragment {
     }
 
     private void saveUserData() {
-        String userID = getCurrentUserID();
+        String userID = BackendUtil.getCurrentUserID();
 
-        if (userID == null) {
+        if (userID == null || getView() == null || getActivity() == null) {
             return;
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("Users").document(userID).set(new HashMap<>());
-    }
+        String username = ((TextView)getView().findViewById(R.id.edit_text_username)).getText().toString();
+        String games = ((TextView)getView().findViewById(R.id.edit_text_games)).getText().toString();
+        String platforms = ((TextView)getView().findViewById(R.id.edit_text_platforms)).getText().toString();
+        String bio = ((TextView)getView().findViewById(R.id.edit_text_bio)).getText().toString();
 
-    private String getCurrentUserID() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            //return the current user's user ID
-            return user.getUid();
-        }
-        //if no user is signed in
-        return null;
+        db.collection("Users").document(userID).set(new Profile(username, games, platforms, bio));
+
+        getActivity().finish();
     }
 }

@@ -24,9 +24,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivityForResult(
-                AuthUI.getInstance().createSignInIntentBuilder().build(),
-                RC_SIGN_IN);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, HomeFragment.newInstance()).commit();
+        } else {
+            startActivityForResult(
+                    AuthUI.getInstance().createSignInIntentBuilder().build(),
+                    RC_SIGN_IN);
+        }
     }
 
     @Override

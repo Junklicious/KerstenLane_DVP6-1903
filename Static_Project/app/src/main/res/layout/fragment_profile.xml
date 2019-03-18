@@ -41,7 +41,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/games"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+                android:textColor="@color/colorAccent" />
 
             <TextView
                 android:id="@+id/profile_text_games"
@@ -56,7 +56,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/platforms"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+                android:textColor="@color/colorAccent" />
 
             <TextView
                 android:id="@+id/profile_text_platforms"
@@ -71,7 +71,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/bio"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+                android:textColor="@color/colorAccent" />
 
             <TextView
                 android:id="@+id/profile_text_bio"
@@ -105,6 +105,7 @@
         android:layout_marginEnd="16dp"
         android:text="@string/username"
         android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="@+id/profile_image" />

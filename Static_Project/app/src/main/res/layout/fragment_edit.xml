@@ -72,11 +72,21 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Menu"
                 android:textColor="@color/colorAccent" />
 
-            <EditText
-                android:id="@+id/edit_text_platforms"
+            <Spinner
+                android:id="@+id/edit_spinner_platforms"
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/platforms_hint" />
+                android:entries="@array/platforms_list"/>
+
+            <Switch
+                android:id="@+id/edit_switch_location"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/location_based"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textColor="@color/colorAccent"/>
 
             <TextView
                 android:layout_width="match_parent"

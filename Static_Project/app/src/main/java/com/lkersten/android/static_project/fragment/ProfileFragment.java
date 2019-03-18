@@ -33,6 +33,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //load user profile data on initial viewing
         loadUserProfile();
     }
 
@@ -40,6 +41,7 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        //load user profile data when returning from edit
         loadUserProfile();
     }
 
@@ -64,6 +66,8 @@ public class ProfileFragment extends Fragment {
                 if (getView() == null || userProfile == null) {
                     return;
                 }
+
+                //grab array of platforms from resources
 
                 //set UI
                 ((TextView)getView().findViewById(R.id.profile_text_username)).setText(userProfile.getUsername());

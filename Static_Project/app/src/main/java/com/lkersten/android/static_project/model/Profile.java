@@ -4,14 +4,13 @@ public class Profile {
 
     private String username;
     private String games;
-    private String tabletopGames;
-    private String platforms;
+    private int platforms;
     private String bio;
     private double[] Location;
 
     public Profile() { }
 
-    public Profile(String username, String games, String platforms, String bio) {
+    public Profile(String username, String games, int platforms, String bio) {
         this.username = username;
         this.games = games;
         this.platforms = platforms;
@@ -34,19 +33,11 @@ public class Profile {
         this.games = games;
     }
 
-    public String getTabletopGames() {
-        return tabletopGames;
-    }
-
-    public void setTabletopGames(String tabletopGames) {
-        this.tabletopGames = tabletopGames;
-    }
-
-    public String getPlatforms() {
+    public int getPlatforms() {
         return platforms;
     }
 
-    public void setPlatforms(String platforms) {
+    public void setPlatforms(int platforms) {
         this.platforms = platforms;
     }
 

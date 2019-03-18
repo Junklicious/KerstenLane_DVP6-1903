@@ -48,4 +48,8 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
 
         }
     }
+
+    private void findNewPlayer() {
+        
+    }
 }

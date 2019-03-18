@@ -1,17 +1,28 @@
 <resources>
     <string name="app_name">Static_Project</string>
-    <string name="browse_connections">Browse Connections</string>
     <string name="profile">Profile</string>
-    <string name="chat">Chat</string>
+    <string name="chat">Your Connections</string>
     <string name="sign_out">Sign out</string>
     <string name="edit">Edit</string>
     <string name="games">Games:</string>
-    <string name="platforms">Platforms:</string>
+    <string name="platforms">Main Platform:</string>
     <string name="bio">Bio:</string>
     <string name="username">Username:</string>
     <string name="username_hint">Username</string>
-    <string name="games_hint">Games you play</string>
+    <string name="games_hint">Overwatch, CS:GO, Rocket League, etc.</string>
     <string name="platforms_hint">Platforms you play on</string>
     <string name="bio_hint">Enter info about you</string>
-    <string name="browse_players">Browse Players</string>
+    <string name="find_players">Find Players</string>
+    <string name="location_based">Location Based Searching:</string>
+
+
+    <!-- Platforms -->
+    <string-array name="platforms_list">
+        <item>PC</item>
+        <item>PS4</item>
+        <item>Xbox</item>
+        <item>Nintendo Switch</item>
+        <item>Tabletop</item>
+    </string-array>
+
 </resources>

@@ -6,7 +6,8 @@ public class Profile {
     private String games;
     private int platforms;
     private String bio;
-    private double[] Location;
+    private Boolean locationEnabled;
+    private double[] location;
 
     public Profile() { }
 
@@ -15,6 +16,15 @@ public class Profile {
         this.games = games;
         this.platforms = platforms;
         this.bio = bio;
+
+    }
+
+    public Profile(String username, String games, int platforms, String bio, Boolean locationEnabled) {
+        this.username = username;
+        this.games = games;
+        this.platforms = platforms;
+        this.bio = bio;
+        this.locationEnabled = locationEnabled;
     }
 
     public String getUsername() {
@@ -50,10 +60,18 @@ public class Profile {
     }
 
     public double[] getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(double[] location) {
-        Location = location;
+        location = location;
+    }
+
+    public Boolean isLocationEnabled() {
+        return locationEnabled;
+    }
+
+    public void setLocationEnabled(Boolean locationEnabled) {
+        locationEnabled = locationEnabled;
     }
 }

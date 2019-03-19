@@ -34,7 +34,7 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         //load user profile data on initial viewing
-        loadUserProfile();
+        //loadUserProfile();
     }
 
     @Override
@@ -63,16 +63,17 @@ public class ProfileFragment extends Fragment {
                 //convert data to profile
                 Profile userProfile = documentSnapshot.toObject(Profile.class);
 
-                if (getView() == null || userProfile == null) {
+                if (getView() == null || getContext() == null || userProfile == null) {
                     return;
                 }
 
                 //grab array of platforms from resources
+                String[] platforms = getContext().getResources().getStringArray(R.array.platforms_list);
 
                 //set UI
                 ((TextView)getView().findViewById(R.id.profile_text_username)).setText(userProfile.getUsername());
                 ((TextView)getView().findViewById(R.id.profile_text_games)).setText(userProfile.getGames());
-                ((TextView)getView().findViewById(R.id.profile_text_platforms)).setText(userProfile.getPlatforms());
+                ((TextView)getView().findViewById(R.id.profile_text_platforms)).setText(platforms[userProfile.getPlatforms()]);
                 ((TextView)getView().findViewById(R.id.profile_text_bio)).setText(userProfile.getBio());
             }
         });

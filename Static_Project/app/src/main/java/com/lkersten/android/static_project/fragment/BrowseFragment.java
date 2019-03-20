@@ -18,9 +18,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lkersten.android.static_project.R;
 import com.lkersten.android.static_project.model.Profile;
+
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class BrowseFragment extends Fragment implements View.OnClickListener {
 
@@ -47,10 +54,8 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         getView().findViewById(R.id.browse_btn_yes).setOnClickListener(this);
         getView().findViewById(R.id.browse_btn_no).setOnClickListener(this);
 
-        //add profile fragment to browse page
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.browse_fragment_container, ProfileFragment.newInstance())
-                .commit();
+        //find new players based on user info
+        findNewPlayer();
     }
 
     @Override
@@ -84,17 +89,18 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
                 }
 
                 //set check profile info
-                String games = userProfile.getGames();
+                List<String> games = userProfile.getGames();
                 int platform = userProfile.getPlatforms();
 
                 //check if location data is enabled
+                /*
                 if (userProfile.isLocationEnabled()) {
                     if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
                     } else {
                         getActivity().requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_RC);
                     }
-                }
+                } */
 
                 //get location if needed
 
@@ -103,7 +109,27 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
 
                 CollectionReference usersRef = db.collection("Users");
 
-                usersRef.whereEqualTo("platforms", 0);
+                Query query = usersRef.whereEqualTo("platforms", platform);
+
+                query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        if (queryDocumentSnapshots == null) {
+                            return;
+                        }
+
+                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+
+                        for (int i = 0; i < documents.size(); i++) {
+                            Profile player = documents.get(i).toObject(Profile.class);
+
+                            //display player
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.browse_fragment_container, ProfileFragment.newInstance(player))
+                                    .commit();
+                        }
+                    }
+                });
             }
         });
     }

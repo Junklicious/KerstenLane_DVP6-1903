@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.lkersten.android.static_project.BrowseActivity;
@@ -61,12 +62,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.home_btn_chat:
+                Toast.makeText(getContext(), "Intent to player connections page", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_btn_profile:
                 intent = new Intent(getActivity(), ProfileActivity.class);
                 startActivity(intent);
                 break;
             case R.id.home_btn_logout:
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.signOut();
+                startActivityForResult(
+                        AuthUI.getInstance().createSignInIntentBuilder().build(),
+                        123);
                 break;
         }
 

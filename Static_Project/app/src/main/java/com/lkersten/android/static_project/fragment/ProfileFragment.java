@@ -19,8 +19,16 @@ import com.lkersten.android.static_project.model.Profile;
 
 public class ProfileFragment extends Fragment {
 
+    private Profile mProfile = null;
+
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
+    }
+
+    public static ProfileFragment newInstance(Profile profile) {
+        ProfileFragment fragment = new ProfileFragment();
+        fragment.mProfile = profile;
+        return fragment;
     }
 
     @Nullable
@@ -33,8 +41,6 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //load user profile data on initial viewing
-        //loadUserProfile();
     }
 
     @Override
@@ -46,36 +52,53 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadUserProfile() {
-        //populate info based on user profile from firebase
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null) {
-            return;
-        }
+        if (mProfile == null) {
+            //populate info based on user profile from firebase
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        //get database instance
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        //get profile based on userID
-        db.collection("Users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                //convert data to profile
-                Profile userProfile = documentSnapshot.toObject(Profile.class);
-
-                if (getView() == null || getContext() == null || userProfile == null) {
-                    return;
-                }
-
-                //grab array of platforms from resources
-                String[] platforms = getContext().getResources().getStringArray(R.array.platforms_list);
-
-                //set UI
-                ((TextView)getView().findViewById(R.id.profile_text_username)).setText(userProfile.getUsername());
-                ((TextView)getView().findViewById(R.id.profile_text_games)).setText(userProfile.getGames());
-                ((TextView)getView().findViewById(R.id.profile_text_platforms)).setText(platforms[userProfile.getPlatforms()]);
-                ((TextView)getView().findViewById(R.id.profile_text_bio)).setText(userProfile.getBio());
+            if (user == null) {
+                return;
             }
-        });
+
+            //get database instance
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            //get profile based on userID
+            db.collection("Users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    //convert data to profile
+                    Profile userProfile = documentSnapshot.toObject(Profile.class);
+
+                    if (getView() == null || getContext() == null || userProfile == null) {
+                        return;
+                    }
+
+                    //grab array of platforms from resources
+                    String[] platforms = getContext().getResources().getStringArray(R.array.platforms_list);
+
+                    //set UI
+                    ((TextView) getView().findViewById(R.id.profile_text_username)).setText(userProfile.getUsername());
+                    ((TextView) getView().findViewById(R.id.profile_text_games)).setText(userProfile.getGamesAsList());
+                    ((TextView) getView().findViewById(R.id.profile_text_platforms)).setText(platforms[userProfile.getPlatforms()]);
+                    ((TextView) getView().findViewById(R.id.profile_text_bio)).setText(userProfile.getBio());
+                }
+            });
+        } else {
+            //load pre-populated profile data
+            if (getView() == null || getContext() == null) {
+                return;
+            }
+
+            //grab array of platforms from resources
+            String[] platforms = getContext().getResources().getStringArray(R.array.platforms_list);
+
+            //set UI
+            ((TextView) getView().findViewById(R.id.profile_text_username)).setText(mProfile.getUsername());
+            ((TextView) getView().findViewById(R.id.profile_text_games)).setText(mProfile.getGamesAsList());
+            ((TextView) getView().findViewById(R.id.profile_text_platforms)).setText(platforms[mProfile.getPlatforms()]);
+            ((TextView) getView().findViewById(R.id.profile_text_bio)).setText(mProfile.getBio());
+        }
     }
 }

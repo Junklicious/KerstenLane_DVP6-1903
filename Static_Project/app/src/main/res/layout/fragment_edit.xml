@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/edit_image_profile"
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:layout_marginStart="8dp"
@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/edit_image_profile">
 
         <LinearLayout
             android:orientation="vertical"
@@ -62,7 +62,8 @@
                 android:id="@+id/edit_text_games"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/games_hint" />
+                android:hint="@string/games_hint"
+                android:inputType="textMultiLine" />
 
             <TextView
                 android:layout_width="match_parent"

@@ -38,8 +38,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.lkersten.android.static_project.R;
 import com.lkersten.android.static_project.model.Profile;
+import com.loopj.android.image.SmartImageView;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,6 +52,8 @@ public class EditFragment extends Fragment {
     private static final int PICK_REQUEST_CODE = 0x01010;
 
     private String mUserID;
+    private String mDownloadURL;
+    private Profile mUserProfile;
 
     public static EditFragment newInstance() {
         return new EditFragment();
@@ -152,11 +156,23 @@ public class EditFragment extends Fragment {
                     return;
                 }
 
+                //set member for userProfile
+                mUserProfile = userProfile;
+
                 //set UI from Database
                 ((TextView)getView().findViewById(R.id.edit_text_username)).setText(userProfile.getUsername());
-                ((TextView)getView().findViewById(R.id.edit_text_games)).setText(userProfile.getGamesAsList());
+                ((TextView)getView().findViewById(R.id.edit_text_games)).setText(userProfile.gamesAsList());
                 ((Spinner)getView().findViewById(R.id.edit_spinner_platforms)).setSelection(userProfile.getPlatforms());
                 ((TextView)getView().findViewById(R.id.edit_text_bio)).setText(userProfile.getBio());
+
+                if (userProfile.getLocationEnabled() != null) {
+                    ((Switch) getView().findViewById(R.id.edit_switch_location)).setChecked(userProfile.getLocationEnabled());
+                }
+
+                if (userProfile.getImageUrl() != null && !userProfile.getImageUrl().isEmpty()) {
+                    mDownloadURL = userProfile.getImageUrl();
+                    ((SmartImageView) getView().findViewById(R.id.edit_image_profile)).setImageUrl(userProfile.getImageUrl());
+                }
             }
         });
     }
@@ -184,8 +200,22 @@ public class EditFragment extends Fragment {
 
         List<String> games = Arrays.asList(gamesArray);
 
-        db.collection("Users").document(user.getUid()).set(new Profile(username, games, platforms, bio, locationEnabled));
+        if (mUserProfile != null) {
+            mUserProfile.setUsername(username);
+            mUserProfile.setGames(games);
+            mUserProfile.setPlatforms(platforms);
+            mUserProfile.setLocationEnabled(locationEnabled);
+            mUserProfile.setBio(bio);
+            mUserProfile.setImageUrl(mDownloadURL);
+        } else {
+            List<String> blackList = new ArrayList<>();
+            blackList.add(user.getUid());
+            mUserProfile = new Profile(username, games, platforms, bio, locationEnabled, blackList, mDownloadURL);
+        }
 
+        db.collection("Users").document(user.getUid()).set(mUserProfile);
+
+        //dismiss edit view
         getActivity().finish();
     }
 
@@ -226,18 +256,23 @@ public class EditFragment extends Fragment {
                 final StorageReference storageRef = storage.getReference();
 
                 if (mUserID != null) {
-                    StorageReference profilePicRef = storageRef.child("images/"+mUserID+".jpg");
+                    final StorageReference profilePicRef = storageRef.child("images/"+mUserID+".jpg");
                     UploadTask uploadTask = profilePicRef.putFile(imageUri);
                     uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            return storageRef.getDownloadUrl();
+                            return profilePicRef.getDownloadUrl();
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             Uri downloadUri = task.getResult();
-                            Log.i("WTF", "onComplete: " + downloadUri.toString());
+                            if (downloadUri != null) {
+                                mDownloadURL = downloadUri.toString();
+                                if (getView() != null) {
+                                    ((SmartImageView)getView().findViewById(R.id.edit_image_profile)).setImageUrl(mDownloadURL);
+                                }
+                            }
                         }
                     });
                 }

@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.lkersten.android.static_project.R;
 import com.lkersten.android.static_project.model.Profile;
+import com.loopj.android.image.SmartImageView;
 
 public class ProfileFragment extends Fragment {
 
@@ -40,7 +41,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -80,9 +80,13 @@ public class ProfileFragment extends Fragment {
 
                     //set UI
                     ((TextView) getView().findViewById(R.id.profile_text_username)).setText(userProfile.getUsername());
-                    ((TextView) getView().findViewById(R.id.profile_text_games)).setText(userProfile.getGamesAsList());
+                    ((TextView) getView().findViewById(R.id.profile_text_games)).setText(userProfile.gamesAsList());
                     ((TextView) getView().findViewById(R.id.profile_text_platforms)).setText(platforms[userProfile.getPlatforms()]);
                     ((TextView) getView().findViewById(R.id.profile_text_bio)).setText(userProfile.getBio());
+
+                    if (userProfile.getImageUrl() != null && !userProfile.getImageUrl().isEmpty()) {
+                        ((SmartImageView)getView().findViewById(R.id.profile_image)).setImageUrl(userProfile.getImageUrl());
+                    }
                 }
             });
         } else {
@@ -96,9 +100,13 @@ public class ProfileFragment extends Fragment {
 
             //set UI
             ((TextView) getView().findViewById(R.id.profile_text_username)).setText(mProfile.getUsername());
-            ((TextView) getView().findViewById(R.id.profile_text_games)).setText(mProfile.getGamesAsList());
+            ((TextView) getView().findViewById(R.id.profile_text_games)).setText(mProfile.gamesAsList());
             ((TextView) getView().findViewById(R.id.profile_text_platforms)).setText(platforms[mProfile.getPlatforms()]);
             ((TextView) getView().findViewById(R.id.profile_text_bio)).setText(mProfile.getBio());
+
+            if (mProfile.getImageUrl() != null && !mProfile.getImageUrl().isEmpty()) {
+                ((SmartImageView)getView().findViewById(R.id.profile_image)).setImageUrl(mProfile.getImageUrl());
+            }
         }
     }
 }

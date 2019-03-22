@@ -8,14 +8,22 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.lkersten.android.static_project.BrowseActivity;
+import com.lkersten.android.static_project.EditActivity;
 import com.lkersten.android.static_project.ProfileActivity;
 import com.lkersten.android.static_project.R;
+import com.lkersten.android.static_project.model.Profile;
+import com.loopj.android.image.SmartImageView;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -41,6 +49,48 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         getView().findViewById(R.id.home_btn_chat).setOnClickListener(this);
         getView().findViewById(R.id.home_btn_profile).setOnClickListener(this);
         getView().findViewById(R.id.home_btn_logout).setOnClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //get user profile for username and image
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
+
+        //get database instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        //get profile based on userID
+        db.collection("Users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                //convert data to profile
+                Profile userProfile = documentSnapshot.toObject(Profile.class);
+
+                //show user edit page so they can create a profile
+                if (userProfile == null) {
+                    startActivity(new Intent(getActivity(), EditActivity.class));
+                    return;
+                }
+
+                if (getView() == null || getContext() == null) {
+                    return;
+                }
+
+                //set UI
+                ((TextView) getView().findViewById(R.id.home_text_username)).setText(userProfile.getUsername());
+
+                if (userProfile.getImageUrl() != null && !userProfile.getImageUrl().isEmpty()) {
+                    ((SmartImageView)getView().findViewById(R.id.home_image_profile)).setImageUrl(userProfile.getImageUrl());
+                }
+            }
+        });
+
     }
 
     @Override

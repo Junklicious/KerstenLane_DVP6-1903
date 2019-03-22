@@ -11,35 +11,23 @@ public class Profile {
     private Boolean locationEnabled;
     private double[] location;
     private List<String> blackList;
+    private String imageUrl;
 
-    public Profile() { }
+    public Profile() {
 
-    public Profile(String username, List<String> games, int platforms, String bio) {
-        this.username = username;
-        this.games = games;
-        this.platforms = platforms;
-        this.bio = bio;
-        locationEnabled = false;
     }
 
-    public Profile(String username, List<String> games, int platforms, String bio, Boolean locationEnabled) {
-        this.username = username;
-        this.games = games;
-        this.platforms = platforms;
-        this.bio = bio;
-        this.locationEnabled = locationEnabled;
-    }
-
-    public Profile(String username, List<String> games, int platforms, String bio, Boolean locationEnabled, List<String> blackList) {
+    public Profile(String username, List<String> games, int platforms, String bio, Boolean locationEnabled, List<String> blackList, String imageUrl) {
         this.username = username;
         this.games = games;
         this.platforms = platforms;
         this.bio = bio;
         this.locationEnabled = locationEnabled;
         this.blackList = blackList;
+        this.imageUrl = imageUrl;
     }
 
-    public String getGamesAsList() {
+    public String gamesAsList() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < games.size(); i++) {
             sb.append(games.get(i));
@@ -87,14 +75,30 @@ public class Profile {
     }
 
     public void setLocation(double[] location) {
-        location = location;
+        this.location = location;
     }
 
-    public Boolean isLocationEnabled() {
+    public Boolean getLocationEnabled() {
         return locationEnabled;
     }
 
     public void setLocationEnabled(Boolean locationEnabled) {
-        locationEnabled = locationEnabled;
+        this.locationEnabled = locationEnabled;
+    }
+
+    public List<String> getBlackList() {
+        return blackList;
+    }
+
+    public void setBlackList(List<String> blackList) {
+        this.blackList = blackList;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

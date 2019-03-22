@@ -3,6 +3,8 @@ package com.lkersten.android.static_project.fragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,11 +25,13 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lkersten.android.static_project.R;
 import com.lkersten.android.static_project.model.Profile;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class BrowseFragment extends Fragment implements View.OnClickListener {
@@ -35,6 +39,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
     private static final int PERMISSION_RC = 0x001010;
 
     private String mDisplayedUserID;
+    private FirebaseUser mUser;
 
     public static BrowseFragment newInstance() {
         return new BrowseFragment();
@@ -51,6 +56,13 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         if (getActivity() == null || getView() == null) {
             return;
+        }
+
+        //retrieve current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            //save member
+            mUser = user;
         }
 
         //add button functionality
@@ -86,16 +98,14 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
     }
 
     private void findNewPlayer() {
-        //retrieve current user profile for query info
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user == null || getView() == null) {
+        //check for user
+        if (mUser == null || getView() == null) {
             return;
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("Users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("Users").document(mUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 //convert data to profile
@@ -110,20 +120,22 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
                 //set check profile info
                 List<String> games = userProfile.getGames();
                 int platform = userProfile.getPlatforms();
+                Location tempLocation = null;
 
                 //check if location data is enabled
                 if (userProfile.getLocationEnabled()) {
                     if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         //grab location info
-
+                        LocationManager locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                        tempLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     } else {
                         requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_RC);
                         return;
                     }
                 }
 
-                //get location if needed
-
+                //final location for use in filter
+                final Location userLocation = tempLocation;
 
                 //query for new player based on user data
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -145,14 +157,16 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
                             Profile player = documents.get(i).toObject(Profile.class);
 
                             if (player != null && !userProfile.getBlackList().contains(documents.get(i).getId())) {
-                                //display player
-                                getActivity().getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.browse_fragment_container, ProfileFragment.newInstance(player))
-                                        .commit();
-                                //grab id of user
-                                mDisplayedUserID = documents.get(i).getId();
-                                //release for loop
-                                break;
+                                if (compareLocation(userLocation, player.getLocation())) {
+                                    //display player
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.browse_fragment_container, ProfileFragment.newInstance(player))
+                                            .commit();
+                                    //grab id of user
+                                    mDisplayedUserID = documents.get(i).getId();
+                                    //release for loop
+                                    break;
+                                }
                             }
 
                             if (i == documents.size() - 1) {
@@ -168,28 +182,39 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void addToBlackList(String userToBlacklist) {
-        //get current user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            return;
+    private boolean compareLocation(Location userLocation, GeoPoint matchLocation) {
+        //save userLocation for future use in comparisons
+        if (mUser != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Users").document(mUser.getUid())
+                    .update("location", new GeoPoint(userLocation.getLatitude(), userLocation.getLongitude()));
         }
 
-        //get firestore instance
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(user.getUid()).update("blackList", FieldValue.arrayUnion(userToBlacklist));
+        if (userLocation == null) {
+            return true;
+        }
+
+        if (matchLocation == null) {
+            return false;
+        }
+
+        //convert matchLocation to actual location
+        Location compareLocation = new Location("");
+        compareLocation.setLatitude(matchLocation.getLatitude());
+        compareLocation.setLongitude(matchLocation.getLongitude());
+
+        return userLocation.distanceTo(compareLocation) <= 10000;
     }
 
-    private  void addToConnections(String userToAdd) {
-        //get current user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
+    private void addToBlackList(String userToBlacklist) {
+        //check for current user
+        if (mUser == null) {
             return;
         }
 
         //get firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(user.getUid()).update("connections", FieldValue.arrayUnion(userToAdd));
+        db.collection("Users").document(mUser.getUid()).update("blackList", FieldValue.arrayUnion(userToBlacklist));
     }
 
     private void checkMatch(String matchedUserID) {
@@ -197,10 +222,8 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         addToBlackList(matchedUserID);
 
         //add user to connections
-        addToConnections(matchedUserID);
 
         //check for match
-
     }
 
     @Override

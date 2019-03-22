@@ -18,7 +18,7 @@ To Install Static you will need the application's APK and an android device/emul
 
 ### Specifications:
 
-**Minimum SDK Version:** API 21
+**Minimum SDK Version:** API 23
 
 **Maximum SDK Version:** API 28
 
@@ -30,17 +30,21 @@ To Install Static you will need the application's APK and an android device/emul
 
 ### Testing Information:
 
-**Test User:**
+**Test User #1:**
 
 - Email: test@test.com
 - Password: TestTest321
 
-For testing you can either create a new user through the sign up process or use the test user above. The Firebase database is connected to user profiles now so the test user might be preferred given that it already has some data in the database. If you create a new user, you will have to edit the profile before any custom information will appear on the profile screen.
+**Test User #2:**
+
+- Email: test2@test.com
+- Password: TestPassword
+
+For testing you can either create a new user through the sign up process or use a test user above. Connections are currently made via platform. In the future users will select a game to search for from their list of games. Location searching is currently functional, but only searches in a fixed 10 Kilometer radius around the user. Users are placed on a blacklist after another user accepts or declines their profile, so no user will show up twice (this makes test somewhat difficult). In the future a larger pool of users will be added to prevent this issue.
 
 
 
 #### Known Issues:
 
-- Currently the browse page doesn't do anything but display the current users profile just to test how it looks.
-- Users can't currently approve or decline connections with users, which was part of Milestone #1, due to the full profile database implementation being part of Milestone #2.
-- UI is mostly placeholder and doesn't reflect the goal for the final design
+- No game based searching
+- Slow profile loading

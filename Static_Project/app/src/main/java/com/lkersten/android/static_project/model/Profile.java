@@ -1,5 +1,7 @@
 package com.lkersten.android.static_project.model;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.List;
 
 public class Profile {
@@ -9,7 +11,7 @@ public class Profile {
     private int platforms;
     private String bio;
     private Boolean locationEnabled;
-    private double[] location;
+    private GeoPoint location;
     private List<String> blackList;
     private String imageUrl;
 
@@ -70,11 +72,11 @@ public class Profile {
         this.bio = bio;
     }
 
-    public double[] getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
-    public void setLocation(double[] location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 

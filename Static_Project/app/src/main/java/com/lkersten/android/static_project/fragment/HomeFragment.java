@@ -100,6 +100,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (Auth.getCurrentUser() == null) {
             // request that the user sign in before they use the app
             Toast.makeText(getContext(), "Please Sign-in before proceeding", Toast.LENGTH_SHORT).show();
+            startActivityForResult(
+                    AuthUI.getInstance().createSignInIntentBuilder().build(),
+                    123);
+            return;
         }
 
         //intent to be used for navigation buttons

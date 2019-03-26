@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.lkersten.android.static_project.BrowseActivity;
+import com.lkersten.android.static_project.ConnectionsActivity;
 import com.lkersten.android.static_project.EditActivity;
 import com.lkersten.android.static_project.ProfileActivity;
 import com.lkersten.android.static_project.R;
@@ -116,7 +117,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.home_btn_chat:
-                Toast.makeText(getContext(), "Intent to player connections page", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), ConnectionsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.home_btn_profile:
                 intent = new Intent(getActivity(), ProfileActivity.class);

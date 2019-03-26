@@ -32,7 +32,9 @@ import com.lkersten.android.static_project.R;
 import com.lkersten.android.static_project.model.Profile;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BrowseFragment extends Fragment implements View.OnClickListener {
 
@@ -217,13 +219,32 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         db.collection("Users").document(mUser.getUid()).update("blackList", FieldValue.arrayUnion(userToBlacklist));
     }
 
-    private void checkMatch(String matchedUserID) {
+    private void checkMatch(final String matchedUserID) {
         //add user to blacklist
         addToBlackList(matchedUserID);
 
-        //add user to connections
+        //firebase query to check for chat
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference connectionsRef = db.collection("Connections");
+        Query query = connectionsRef.whereEqualTo("Users", Arrays.asList(matchedUserID, mUser.getUid()));
 
-        //check for match
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (queryDocumentSnapshots == null || queryDocumentSnapshots.getDocuments().size() == 0) {
+                    //Create Chat
+                    Map<String, Object> connection = new HashMap<>();
+                    connection.put("Users", Arrays.asList(mUser.getUid(), matchedUserID));
+                    connection.put("Enabled", false);
+                    db.collection("Connections").document().set(connection);
+
+                } else if (queryDocumentSnapshots.getDocuments().size() == 1) {
+                    //Enable Chat
+                    DocumentSnapshot chatConnection = queryDocumentSnapshots.getDocuments().get(0);
+                    db.collection("Connections").document(chatConnection.getId()).update("Enabled", true);
+                }
+            }
+        });
     }
 
     @Override

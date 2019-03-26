@@ -14,6 +14,7 @@
     <string name="bio_hint">Enter info about you</string>
     <string name="find_players">Find Players</string>
     <string name="location_based">Location Based Searching:</string>
+    <string name="empty_connections">No Connections</string>
 
 
     <!-- Platforms -->

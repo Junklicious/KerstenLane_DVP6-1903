@@ -159,7 +159,19 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
                             Profile player = documents.get(i).toObject(Profile.class);
 
                             if (player != null && !userProfile.getBlackList().contains(documents.get(i).getId())) {
-                                if (compareLocation(userLocation, player.getLocation())) {
+                                if (userProfile.getLocationEnabled()) {
+                                    if (compareLocation(userLocation, player.getLocation())) {
+                                        //display player
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.browse_fragment_container, ProfileFragment.newInstance(player))
+                                                .commit();
+                                        //grab id of user
+                                        mDisplayedUserID = documents.get(i).getId();
+                                        //release for loop
+                                        break;
+                                    }
+                                } else {
+
                                     //display player
                                     getActivity().getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.browse_fragment_container, ProfileFragment.newInstance(player))

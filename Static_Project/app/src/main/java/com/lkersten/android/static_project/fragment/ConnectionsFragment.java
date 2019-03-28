@@ -35,6 +35,7 @@ public class ConnectionsFragment extends ListFragment {
     private ArrayList<String> mConnectionIDs;
     private ArrayList<String> mConnectionNames;
     private Map<String, String> mChatIDs;
+    private FirebaseFirestore db;
 
     public static ConnectionsFragment newInstance() {
         return new ConnectionsFragment();
@@ -49,6 +50,20 @@ public class ConnectionsFragment extends ListFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        //get database
+        db = FirebaseFirestore.getInstance();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //get connections
+        resetData();
+        fetchListOfConnections();
+    }
+
+    private void fetchListOfConnections() {
         //get user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -56,7 +71,6 @@ public class ConnectionsFragment extends ListFragment {
         }
 
         //grab connections from firebase
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
         Query query = db.collection("Connections").whereArrayContains("Users", user.getUid())
                 .whereEqualTo("Enabled", true);
 
@@ -67,6 +81,7 @@ public class ConnectionsFragment extends ListFragment {
                     return;
                 }
                 //get array of documents
+                resetData();
                 mConnectionIDs = new ArrayList<>();
                 mConnectionNames = new ArrayList<>();
                 mChatIDs = new HashMap<>();
@@ -95,6 +110,13 @@ public class ConnectionsFragment extends ListFragment {
                 }
             }
         });
+    }
+
+    private void resetData() {
+        setListAdapter(null);
+        mConnectionIDs = null;
+        mChatIDs = null;
+        mConnectionNames = null;
     }
 
     @Override

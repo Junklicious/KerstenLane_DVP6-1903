@@ -211,12 +211,16 @@ public class ChatFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         //disable connection
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        db.collection("Connections").document(mConnectionID).update("Enabled", false);
-
-                        //dismiss view
-                        if (getActivity() != null) {
-                            getActivity().finish();
-                        }
+                        db.collection("Connections").document(mConnectionID).update("Enabled", false)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                //dismiss view
+                                if (getActivity() != null) {
+                                    getActivity().finish();
+                                }
+                            }
+                        });
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, null);

@@ -24,12 +24,13 @@ import com.lkersten.android.static_project.ChatActivity;
 import com.lkersten.android.static_project.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ConnectionsFragment extends ListFragment {
 
-    public static final String EXTRA_CONNECTION_ID = "EXTRA_USER_ID";
+    public static final String EXTRA_CONNECTION_ID = "EXTRA_CONNECTION_ID";
 
     private ArrayList<String> mConnectionIDs;
     private ArrayList<String> mConnectionNames;
@@ -68,6 +69,7 @@ public class ConnectionsFragment extends ListFragment {
                 //get array of documents
                 mConnectionIDs = new ArrayList<>();
                 mConnectionNames = new ArrayList<>();
+                mChatIDs = new HashMap<>();
 
                 List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                 for (final DocumentSnapshot document : documents) {

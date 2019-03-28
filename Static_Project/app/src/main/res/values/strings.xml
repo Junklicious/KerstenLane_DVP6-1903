@@ -15,6 +15,12 @@
     <string name="find_players">Find Players</string>
     <string name="location_based">Location Based Searching:</string>
     <string name="empty_connections">No Connections</string>
+    <string name="message_hint">Type Message Here</string>
+    <string name="view_profile">View Profile</string>
+    <string name="delete">Delete</string>
+    <string name="delete_dialog_message">Are you sure you want to delete this connection?</string>
+    <string name="delete_dialog_title">Delete Connection</string>
+    <string name="cancel">Cancel</string>
 
 
     <!-- Platforms -->

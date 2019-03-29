@@ -30,21 +30,15 @@ To Install Static you will need the application's APK and an android device/emul
 
 ### Testing Information:
 
-**Test User #1:**
+**Test User #1 - 5:**
 
-- Email: test@test.com
-- Password: TestTest321
+- **Email**: person1@email.com (5 users all with different emails just change out the number for each ex. person2@email.com)
+- **Password**: Password123
 
-**Test User #2:**
-
-- Email: test2@test.com
-- Password: TestPassword
-
-For testing you can either create a new user through the sign up process or use a test user above. Connections are currently made via platform. In the future users will select a game to search for from their list of games. Location searching is currently functional, but only searches in a fixed 10 Kilometer radius around the user. Users are placed on a blacklist after another user accepts or declines their profile, so no user will show up twice (this makes test somewhat difficult). In the future a larger pool of users will be added to prevent this issue.
+For testing you can either create a new user through the sign up process or use a test user above. Connections are currently made via platform. Location searching is functional, but only searches in a fixed 10 Kilometer radius around the user. Users are placed on a blacklist after another user accepts or declines their profile, so no user will show up twice (this makes test somewhat difficult).
 
 
 
 #### Known Issues:
 
-- No game based searching
-- Slow profile loading
+- RecyclerView on the chat page can cause UI bugs when the messages begin to go off screen, but the chat remains functional

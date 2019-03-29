@@ -213,10 +213,15 @@ public class EditFragment extends Fragment {
             mUserProfile = new Profile(username, games, platforms, bio, locationEnabled, blackList, mDownloadURL);
         }
 
-        db.collection("Users").document(user.getUid()).set(mUserProfile);
-
-        //dismiss edit view
-        getActivity().finish();
+        db.collection("Users").document(user.getUid()).set(mUserProfile).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //dismiss edit view
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
+            }
+        });
     }
 
     private void pickImage() {
